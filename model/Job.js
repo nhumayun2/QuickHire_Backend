@@ -26,6 +26,18 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    responsibilities: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    requirements: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
   },
   { timestamps: true },
 );
