@@ -35,3 +35,15 @@ export const submitApplication = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getApplications = async (req, res, next) => {
+  try {
+    const applications = await Application.find()
+      .populate("job_id", "title company")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(applications);
+  } catch (error) {
+    next(error);
+  }
+};
