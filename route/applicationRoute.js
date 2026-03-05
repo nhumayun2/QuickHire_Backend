@@ -1,5 +1,6 @@
 import express from "express";
 import { submitApplication } from "../controller/applicationController.js";
+import { getApplications } from "../controller/applicationController.js";
 
 const router = express.Router();
 
