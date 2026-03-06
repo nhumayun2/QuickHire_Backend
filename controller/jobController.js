@@ -42,6 +42,17 @@ export const getJobById = async (req, res, next) => {
   }
 };
 
+export const getAdminJobs = async (req, res, next) => {
+  try {
+    const jobs = await Job.find({ createdBy: req.user.id }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json(jobs);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createJob = async (req, res, next) => {
   try {
     const {
@@ -74,6 +85,7 @@ export const createJob = async (req, res, next) => {
       description,
       responsibilities,
       requirements,
+      createdBy: req.user.id,
     });
     const savedJob = await newJob.save();
 
@@ -86,11 +98,19 @@ export const createJob = async (req, res, next) => {
 export const deleteJob = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deletedJob = await Job.findByIdAndDelete(id);
+    const job = await Job.findById(id);
 
-    if (!deletedJob) {
+    if (!job) {
       return res.status(404).json({ message: "Job not found" });
     }
+
+    if (job.createdBy.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this job" });
+    }
+
+    await job.deleteOne();
 
     res.status(200).json({ message: "Job deleted successfully" });
   } catch (error) {
