@@ -13,11 +13,11 @@ export const getAllJobs = async (req, res, next) => {
     }
 
     if (category) {
-      query.category = { $regex: new RegExp(`^${category}$`, "i") };
+      query.category = { $regex: category, $options: "i" };
     }
 
     if (location) {
-      query.location = { $regex: new RegExp(`^${location}$`, "i") };
+      query.location = { $regex: location, $options: "i" };
     }
 
     const jobs = await Job.find(query).sort({ createdAt: -1 });

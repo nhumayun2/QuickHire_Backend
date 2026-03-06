@@ -1,10 +1,15 @@
 import express from "express";
-import { submitApplication } from "../controller/applicationController.js";
-import { getApplications } from "../controller/applicationController.js";
+import {
+  submitApplication,
+  getApplications,
+} from "../controller/applicationController.js";
+import { validateApplicationInput } from "../middleware/validationMiddleware.js";
+import { adminAuth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", submitApplication);
-router.get("/", getApplications);
+router.post("/", validateApplicationInput, submitApplication);
+
+router.get("/", adminAuth, getApplications);
 
 export default router;

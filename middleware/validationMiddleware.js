@@ -51,8 +51,12 @@ export const validateJobInput = (req, res, next) => {
 };
 
 export const validateApplicationInput = (req, res, next) => {
-  const { email, resumeLink } = req.body;
+  const { name, email, resume_link } = req.body;
   const errors = [];
+
+  if (!name || typeof name !== "string" || name.trim() === "") {
+    errors.push("Name is required.");
+  }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || !emailRegex.test(email)) {
@@ -61,7 +65,7 @@ export const validateApplicationInput = (req, res, next) => {
 
   const urlRegex =
     /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-  if (!resumeLink || !urlRegex.test(resumeLink)) {
+  if (!resume_link || !urlRegex.test(resume_link)) {
     errors.push("Please provide a valid URL for the resume link.");
   }
 
